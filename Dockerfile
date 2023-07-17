@@ -43,8 +43,8 @@ COPY /app/. /var/www/html/
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Configurar permissões e otimizações para o projeto
-#RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
-RUN composer install
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+#RUN composer install
 RUN php artisan config:cache && \
     php artisan route:cache && \
     chmod 777 -R /var/www/html/storage/ && \
