@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  # image project
+  expediente.app:
+    build:
+      args:
+        user: expediente
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: expediente-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    user: expediente
+    ports:
+      - "8000:80"
+      - "6001:6001"
+    volumes:
+      - ./app:/var/www/html
+      - ./supervisor_logs:/var/log/supervisor
+    networks:
+      - laravel
+
+  # db mysql
+  mysql:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: expediente_cmm
+      MYSQL_ROOT_PASSWORD: Solasstec@2023
+      MYSQL_PASSWORD: Solasstec@2023
+      MYSQL_USER: solasstec
+    volumes:
+      - ./.docker/mysql/dbdata:/var/lib/mysql
+    ports:
+      - 3388:3306
+    networks:
+      - laravel
+      
+networks:
+  laravel:
+    driver: bridge
